@@ -12,7 +12,7 @@
 #include <pclomp/gicp_omp.h>
 
 // align point clouds and measure processing time
-pcl::PointCloud<pcl::PointXYZ>::Ptr align(pcl::Registration<pcl::PointXYZ, pcl::PointXYZ>::Ptr registration, const pcl::PointCloud<pcl::PointXYZ>::Ptr& target_cloud, const pcl::PointCloud<pcl::PointXYZ>::Ptr& source_cloud ) {
+pcl::PointCloud<pcl::PointXYZ>::Ptr aligner(pcl::Registration<pcl::PointXYZ, pcl::PointXYZ>::Ptr registration, const pcl::PointCloud<pcl::PointXYZ>::Ptr& target_cloud, const pcl::PointCloud<pcl::PointXYZ>::Ptr& source_cloud ) {
   registration->setInputTarget(target_cloud);
   registration->setInputSource(source_cloud);
   pcl::PointCloud<pcl::PointXYZ>::Ptr aligned(new pcl::PointCloud<pcl::PointXYZ>());
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
       std::cout << "--- pclomp::NDT (" << search_method.first << ", " << n << " threads) ---" << std::endl;
       ndt_omp->setNumThreads(n);
       ndt_omp->setNeighborhoodSearchMethod(search_method.second);
-      aligned = align(ndt_omp, target_cloud, source_cloud);
+      aligned = aligner(ndt_omp, target_cloud, source_cloud);
     }
   }
   
