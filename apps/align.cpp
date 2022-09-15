@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
       std::cout << "--- pclomp::NDT (" << search_method.first << ", " << n << " threads) ---" << std::endl;
       ndt_omp->setNumThreads(n);
       ndt_omp->setNeighborhoodSearchMethod(search_method.second);
-      aligned = align((pcl::Registration<pcl::PointXYZ, pcl::PointXYZ>::Ptr) ndt_omp, target_cloud, source_cloud);
+      aligned = align(ndt_omp, target_cloud, source_cloud);
     }
   }
   
