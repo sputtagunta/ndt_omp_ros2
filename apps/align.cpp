@@ -21,13 +21,13 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr aligner(pcl::Registration<pcl::PointXYZ, pcl
 
   ///auto t1 = ros::WallTime::now();
   auto t1 = system_clock.now();
-  registration->align(*aligned);
+  registration->aligner(*aligned);
   auto t2 = system_clock.now();
   //std::cout << "single : " << (t2 - t1).toSec() * 1000 << "[msec]" << std::endl;
   std::cout << "single : " << (t2 - t1).seconds()* 1000 << "[msec]" << std::endl;
 
   for(int i=0; i<10; i++) {
-    registration->align(*aligned);
+    registration->aligner(*aligned);
   }
   auto t3 = system_clock.now();
   std::cout << "10times: " << (t3 - t2).seconds() * 1000 << "[msec]" << std::endl;
@@ -81,13 +81,13 @@ int main(int argc, char** argv) {
   //TODO:The problem of uninitialized member variables
   std::cout << "--- pclomp::GICP ---" << std::endl;
   pclomp::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>::Ptr gicp_omp(new pclomp::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ>());
-  aligned = align(gicp_omp, target_cloud, source_cloud);
+  aligned = aligner(gicp_omp, target_cloud, source_cloud);
 
 
   std::cout << "--- pcl::NDT ---" << std::endl;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr ndt(new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>());
   ndt->setResolution(1.0);
-  aligned = align(ndt, target_cloud, source_cloud);
+  aligned = aligner(ndt, target_cloud, source_cloud);
 
   std::vector<int> num_threads = {1, omp_get_max_threads()};
   std::vector<std::pair<std::string, pclomp::NeighborSearchMethod>> search_methods = {
